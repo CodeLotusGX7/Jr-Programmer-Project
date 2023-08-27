@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class MainManager : MonoBehaviour
 {
@@ -27,5 +28,47 @@ public class MainManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        LoadColor();
+    }
+
+    // save data
+    [System.Serializable]
+    class SaveData
+    {
+        public Color TeamColor;
+    }
+
+    // save color method
+    public void SaveColor()
+    {
+        SaveData data = new SaveData();
+        data.TeamColor = TeamColor;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);   
+    }
+
+    // load color method
+    public void LoadColor()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+            SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+            TeamColor = data.TeamColor;
+        }
+    }
+    public void Start()
+    {
+        SaveData data = new SaveData();
+        data.TeamColor = TeamColor;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 }

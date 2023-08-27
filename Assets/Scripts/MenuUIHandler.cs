@@ -25,6 +25,19 @@ public class MenuUIHandler : MonoBehaviour
         ColorPicker.Init();
         //this will call the NewColorSelected function when the color picker have a color button clicked.
         ColorPicker.onColorChanged += NewColorSelected;
+
+        // ColorPicker.SelectColor(MainManager.Instance.TeamColor);
+
+        // testing to see if I set something in the inspector
+        try
+        {
+            ColorPicker.SelectColor(MainManager.Instance.TeamColor);
+        }
+        catch (NullReferenceException)
+        {
+            Debug.Log("myLight was not set in the inspector");
+        }
+
     }
 
     // loads scene one of the index
@@ -36,10 +49,25 @@ public class MenuUIHandler : MonoBehaviour
     // exits the game
     public void Exit()
     {
+        //  save the user’s last selected color when the application exits
+        MainManager.Instance.SaveColor();
+
 #if UNITY_EDITOR
         EditorApplication.ExitPlaymode();
 #else     
-        Application.Quit(); // original code to quit Unity Player
+        Application.Quit();
 #endif  
+    }
+
+    public void SaveColorClicked()
+    {
+        MainManager.Instance.SaveColor();
+        Debug.Log("saved color");
+    }
+
+    public void LoadColorClicked()
+    {
+        MainManager.Instance.LoadColor();
+        ColorPicker.SelectColor(MainManager.Instance.TeamColor);
     }
 }
