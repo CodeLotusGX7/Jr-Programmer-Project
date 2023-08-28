@@ -13,7 +13,7 @@ public class MainManager : MonoBehaviour
     
     // class member declaration ( static = values stored ->
     // shared by all instances of class. 1 for all
-    public static MainManager Instance;
+    public static MainManager Instance { get; private set; }
 
     public Color TeamColor;
 
